@@ -1,4 +1,7 @@
 language: node_js
   node_js:
-    - " node"   
-    
+    - "node"   
+services:
+  - postgresql
+before_script:
+  - psql -c `CREATE DATABASE Projects ; ` -U postgres
