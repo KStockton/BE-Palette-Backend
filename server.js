@@ -1,15 +1,20 @@
+// const environment = process.env.NODE_ENV || 'development'
+// const configuration= require('./knexfile')[environment]
+// const database = require('knex')(configuration)
 const express = require('express');
-require('dotenv').config();
+// const bodyParser = require('body-parser');
 const app = express();
-const cors = require('cors');
+// app.use(bodyParser.json())
 
-app.use(cors())
-app.set('port', process.env.PORT || 3001)
+const PORT = process.env.PORT || 3000
 
-app.listen(app.get('port'), () => {
-  console.log(`server is running on port ${app.get('port')}`)
-})
+app.use(express.json())
 
 app.get('/', (request, response) => {
-  return response.status(200).json('hello world');
-})
+  response.send('We\'re going to test all the routes!');
+});
+
+app.listen(PORT, () => {
+  console.log(`App is running 👻 on port ${PORT}`)
+});
+
