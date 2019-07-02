@@ -17,9 +17,15 @@ app.get('/', (request, response) => {
 app.get('/api/v1/projects',  (request, response) => {
   database('projects').select()
   .then(projects => {
-    return response.status(200).json(projects)
+    if(projects.length) {
+      return response.status(200).json(projects)
+    } else {
+      return response.status(404).json('Not Found')
+    }
   })
-})
+  .catch((error) => 
+    response.status(500).json({error}))
+});
 
 
 
