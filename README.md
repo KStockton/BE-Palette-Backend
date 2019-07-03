@@ -83,7 +83,28 @@ The response sends all the palettes from the database.
 ]
 ```
 
+#### Get ```api/v1/palettes/:id``` (Specific Palette)
 
+The response sends a single palette from the database if it exist
+
+Example Response:
+
+```
+[
+    {
+        "id": 4,
+        "palette_title": "Summer Breeze",
+        "color_1": "#6deef9",
+        "color_2": "#eac761",
+        "color_3": "#50c1b9",
+        "color_4": "#bcbc45",
+        "color_5": "#535275",
+        "project_id": 3,
+        "created_at": "2019-07-02T22:35:05.764Z",
+        "updated_at": "2019-07-02T22:35:05.764Z"
+    }
+]
+```
 
 
 ## Contributors

@@ -49,7 +49,7 @@ app.get('/api/v1/projects', async (request, response) => {
 
 //Palettes
 
-app.get('/api/v1/palettes/', async (request, response) => {
+app.get('/api/v1/palettes', async (request, response) => {
   try {
     const palettes = await database('palettes').select()
       if(palettes.length) return response.status(200).json(palettes)
