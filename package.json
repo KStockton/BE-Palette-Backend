@@ -2,10 +2,10 @@
   "name": "be-pallet-picker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "jest --forceExit"
+    "test": "jest "
   },
   "keywords": [],
   "author": "",
