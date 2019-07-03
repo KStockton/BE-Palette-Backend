@@ -1,10 +1,11 @@
-const environment = process.env.NODE_ENV || 'development'
+const environment = process.env.NODE_ENV || 'test'
 const configuration= require('./knexfile')[environment]
 const database = require('knex')(configuration);
 const express = require('express');
-const PORT = process.env.PORT || 3001
 // const bodyParser = require('body-parser');
 const app = express();
+app.set("port", process.env.PORT || 30001)
+
 
 const cors = require('cors');
 app.use(cors());
@@ -72,7 +73,6 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
 
 
 
-app.listen(PORT, () => {
-  console.log(`App is running 👻 on port ${PORT}`)
-});
 
+
+module.exports = app
