@@ -4,7 +4,7 @@ Make request to the base url:
 
 #### ``` Heroku URL ```
 
-## Teams
+## Projects
 
 #### Get ```api/v1/projects``` (All Projects)
 
@@ -33,3 +33,17 @@ Response example:
 | ---- |:----:|:-----------:|
 | id | Integer | Unique ID for each project |
 | project_title | String | Name of the Project |
+
+
+
+## Palettes
+
+
+
+
+
+
+## Contributors
+
+#### Michael King-Stockton
+#### Kristen Hallstrom
