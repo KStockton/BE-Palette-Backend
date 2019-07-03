@@ -32,10 +32,8 @@ app.get('/api/v1/projects', async (request, response) => {
 
 app.get('/api/v1/projects/:id', async (request, response) => {
   const {id} = request.params
-  console.log(id)
   try{
     const project = await database('projects').where('id', id).select()
-    console.log(project)
       if(project.length) return response.status(200).json(project)
       if(!project.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
   } catch(error) {
