@@ -11,18 +11,19 @@ describe('Server', () => {
   })
 
   describe('Server', () => {
-    describe('init', () => {
-      it('should return a 200 status', () => {
-        const res = request(app).get('/')
-        expect(true).toEqual(true)
-      })
-    })
+    // describe('init', () => {
+    //   it('should return a 200 status', () => {
+    //     const res = request(app).get('/')
+    //     expect(true).toEqual(true)
+    //   })
+    // })
   })
   
   describe('Get /api/v1/projects', () => {
     it('should return all the projects in the database', async () => {
       const expectedProjects = await database('projects').select()
-      expectedProjects.forEach(project => {
+        expectedProjects.forEach(project => {
+       
         project.created_at = project.created_at.toJSON()
         project.updated_at = project.updated_at.toJSON()
       })
@@ -61,5 +62,6 @@ describe('Server', () => {
       expect(result).toEqual(expectedPalette)
     })
   })
+
  
 });

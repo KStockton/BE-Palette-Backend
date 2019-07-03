@@ -14,9 +14,9 @@ app.use(express.json())
 
 
 // Projects
-app.get('/', (request, response) => {
-  response.send('We\'re going to test all the routes!');
-});
+// app.get('/', (request, response) => {
+//   response.send('We\'re going to test all the routes!');
+// });
 
 app.get('/api/v1/projects', async (request, response) => {
   try {
@@ -26,6 +26,21 @@ app.get('/api/v1/projects', async (request, response) => {
   } catch(error) {
       return response.status(500).json({error})
     }
+});
+
+app.delete('/api/v1/projects/:id', async (request, response) => {
+  const id = request.params.id
+  const matchingProject = await database('projects').where('id', id)
+
+  if(!matchingProject.length) return response.status(422).send(`No projects found with  id of ${id}`)
+
+  try {
+    await database('palettes').where('project_id', id).del()
+    await database('projects').where('id', id).del() 
+    response.status(204).send()
+  } catch(error) {
+    response.status(500).json({error})
+  }
 })
 
 app.get('/api/v1/projects/:id', async (request, response) => {
@@ -38,6 +53,16 @@ app.get('/api/v1/projects/:id', async (request, response) => {
     return response.status(500).json({error})
   }
 })
+
+
+
+
+
+
+
+
+
+
 
 //Palettes
 app.get('/api/v1/palettes', async (request, response) => {
@@ -59,6 +84,21 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
   } catch(error) {
     return response.status(500).json({error})
   }
-})
+});
+
+// app.post('/api/v1/palettes', async (request, response) => {
+//   const  newProject  = request.body
+
+//   for(let reqParameter of ['project_title']){
+//     if(!newProject[reqParameter] ){
+//       return 
+//         response.status(422).send(`Error: Expected formate: project_title: <String> You're missing a ${reqParameter} property`)
+//     }
+//   }
+//   try {
+//     const projects = await database('projects').insert({newProject})
+//     projects.
+//   }
+// })
 
 module.exports = app
