@@ -2,18 +2,14 @@ const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
 
-
-// import request from 'supertest'
 const request = require('supertest')
 const app = require('./app')
-
 
 describe('Server', () => {
   beforeEach(async () => {
     await database.seed.run()
   })
 
-  
   describe('Server', () => {
     describe('init', () => {
       it('should return a 200 status', () => {
@@ -44,7 +40,7 @@ describe('Server', () => {
       const id = expectedProject.id
         expectedProject.created_at = expectedProject.created_at.toJSON()
         expectedProject.updated_at = expectedProject.updated_at.toJSON()
-        
+
       const response = await request(app).get(`/api/v1/projects/${id}`)
       const result = response.body[0]
 
@@ -52,20 +48,20 @@ describe('Server', () => {
     })
   })
 
-//   describe('GET /students/:id', () => {
-//   it('should return a single student', async () => {
-//     // setup
-//     const expectedStudent = await database('students').first()
-//     const id = student.id
+  //test put,post and delet endpoint for projects
 
-//     // execution
-//     const res = await request(app).get(`/students/${id}`)
-//     const result = res.body[0]
+    describe('GET /api/v1/palettes/:id', () => {
+    it('should return a matching palette for the id', async () => {
+      const expectedPalette = await database('palettes').first()
+      const id = expectedPalette.id
+        expectedPalette.created_at = expectedPalette.created_at.toJSON()
+        expectedPalette.updated_at = expectedPalette.updated_at.toJSON()
 
-//     // expectation
-//     expect(result).toEqual(expectedStudent)
-//   })
-// })
+      const response = await request(app).get(`/api/v1/palettes/${id}`)
+      const result = response.body[0]
 
+      expect(result).toEqual(expectedPalette)
+    })
+  })
  
 });
