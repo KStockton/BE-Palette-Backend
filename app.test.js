@@ -47,9 +47,7 @@ describe('Server', () => {
       expect(result).toEqual(expectedProject)
     })
   })
-
-  //test put,post and delet endpoint for projects
-
+  
     describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
       const expectedPalette = await database('palettes').first()

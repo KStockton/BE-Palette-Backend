@@ -9,8 +9,6 @@ app.set("port", process.env.PORT || 30001)
 
 const cors = require('cors');
 app.use(cors());
-// app.use(bodyParser.json())
-
 
 app.use(express.json())
 
@@ -42,7 +40,6 @@ app.get('/api/v1/projects/:id', async (request, response) => {
 })
 
 //Palettes
-
 app.get('/api/v1/palettes', async (request, response) => {
   try {
     const palettes = await database('palettes').select()
@@ -63,9 +60,5 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
     return response.status(500).json({error})
   }
 })
-
-
-
-
 
 module.exports = app
