@@ -52,6 +52,20 @@ app.get('/api/v1/projects/:id', async (request, response) => {
   } catch(error) {
     return response.status(500).json({error})
   }
+});
+
+app.post('/api/v1/projects', async (request, response) => {
+  const newPost = request.body
+  for(let reqParameter of ['project_title']) {
+    if(!newPost['project_title']) 
+    return response.status(422).json(`Error: Expected format: {project_title: <String>} You are missing ${reqParameter}`)
+  } 
+  try {
+    const updateDatabase =  await database('projects').insert(newPost, 'id')
+    return response.status(201).json(updateDatabase[0])
+  } catch(error) {
+    return response.status(500).json({error})
+  }
 })
 
 
