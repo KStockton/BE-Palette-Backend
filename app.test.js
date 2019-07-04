@@ -68,6 +68,14 @@ describe('Server', () => {
       
       expect(deletedProject).toEqual(undefined)
     });
+
+    it('should not process the request if params or incorrect', async () => {
+      const nonExistentId = 123456789
+      const noMatch = `No projects found with id of ${nonExistentId}`
+      const response = await request(app).delete(`/api/v1/projects/${nonExistentId}`)
+      const result = response.body.error
+      expect(result).toEqual(noMatch)
+    });
   });
   
   describe('GET /api/v1/palettes/:id', () => {
