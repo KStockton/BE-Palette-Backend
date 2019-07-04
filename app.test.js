@@ -47,15 +47,16 @@ describe('Server', () => {
       const response = await request(app).get(`/api/v1/projects/${id}`)
       const projectName = response.body[0].project_title
       expect(projectName).toEqual(expectedProject.project_title)
-    })
+    });
 
     it('should not return a project if there is no match', async () => {
       const projectId = 0
-      const mockResponse = `{Error: No project found with ${projectId}}`
+      const mockResponse = `No project found with id of ${projectId}`
       const response = await request(app).get(`/api/v1/projects/${projectId}`)
-      expect(response.body).toEqual(mockResponse)
-    })
-  })
+      const result = response.body.error
+      expect(result).toEqual(mockResponse)
+    });
+  });
   
     describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
