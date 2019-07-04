@@ -21,8 +21,7 @@ app.use(express.json())
 app.get('/api/v1/projects', async (request, response) => {
   try {
     const projects = await database('projects').select()
-      if(projects.length) return response.status(200).json(projects)
-      if(!projects.length) return response.status(404).json('Not Found')
+    if(projects.length) return response.status(200).json(projects)
   } catch(error) {
       return response.status(500).json({error})
     }
@@ -42,13 +41,13 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
     response.status(500).json({error})
   }
 })
-
+//Get Sepcific Project
 app.get('/api/v1/projects/:id', async (request, response) => {
   const {id} = request.params
   try{
     const project = await database('projects').where('id', id).select()
       if(project.length) return response.status(200).json(project)
-      if(!project.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
+      if(!project.length) return response.status(404).json(`{Error: No project found with ${id}}`)
   } catch(error) {
     return response.status(500).json({error})
   }
@@ -77,13 +76,6 @@ app.put('/api/v1/projects/:id', async (request, response) => {
 
   return response.status(200).json(updateResponse)
 })
-
-
-
-
-
-
-
 
 
 

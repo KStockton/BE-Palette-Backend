@@ -1,7 +1,7 @@
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
-
+const projectsData = require('./seedData')
 const request = require('supertest')
 const app = require('./app')
 
@@ -9,15 +9,18 @@ describe('Server', () => {
   beforeEach(async () => {
     await database.seed.run()
   })
-
-  describe('Server', () => {
-    // describe('init', () => {
-    //   it('should return a 200 status', () => {
-    //     const res = request(app).get('/')
-    //     expect(true).toEqual(true)
-    //   })
-    // })
+  afterAll(async () => {
+    await database.dropDatabase
   })
+
+  // describe('Server', () => {
+  //   describe('init', () => {
+  //     it('should return a 200 status', () => {
+  //       const res = request(app).get('/')
+  //       expect(true).toEqual(true)
+  //     })
+  //   })
+  // })
   
   describe('Get /api/v1/projects', () => {
     it('should return all the projects in the database', async () => {
@@ -29,8 +32,7 @@ describe('Server', () => {
       })
       
       const response = await request(app).get('/api/v1/projects')
-      const projects = response.body
-      
+      const projects = response.body   
       expect(expectedProjects).toEqual(projects)
     })
   })
@@ -43,9 +45,15 @@ describe('Server', () => {
         expectedProject.updated_at = expectedProject.updated_at.toJSON()
 
       const response = await request(app).get(`/api/v1/projects/${id}`)
-      const result = response.body[0]
+      const projectName = response.body[0].project_title
+      expect(projectName).toEqual(expectedProject.project_title)
+    })
 
-      expect(result).toEqual(expectedProject)
+    it('should not return a project if there is no match', async () => {
+      const projectId = 0
+      const mockResponse = `{Error: No project found with ${projectId}}`
+      const response = await request(app).get(`/api/v1/projects/${projectId}`)
+      expect(response.body).toEqual(mockResponse)
     })
   })
   
