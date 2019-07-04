@@ -10,7 +10,7 @@ describe('Server', () => {
     await database.seed.run()
   })
   afterAll(async () => {
-    await database.dropDatabase
+    await database.dropDatabase()
   })
 
   // describe('Server', () => {
@@ -49,7 +49,7 @@ describe('Server', () => {
       expect(projectName).toEqual(expectedProject.project_title)
     });
 
-    it('should not return a project if there is no match', async () => {
+    it('should not return a project if there is no match with given id', async () => {
       const projectId = 0
       const mockResponse = `No project found with id of ${projectId}`
       const response = await request(app).get(`/api/v1/projects/${projectId}`)
@@ -57,8 +57,20 @@ describe('Server', () => {
       expect(result).toEqual(mockResponse)
     });
   });
+
+  describe('DELETE /api/v1/projects/:id', () => {
+    it('should delete the project if it exist in the database', async () => {
+      const projectToDelete = await database('projects').first()
+      const id = projectToDelete.id
+      
+      const response = await request(app).delete(`/api/v1/projects/${id}`)
+      const deletedProject = await database('projects').where({id: id}).first()
+      
+      expect(deletedProject).toEqual(undefined)
+    });
+  });
   
-    describe('GET /api/v1/palettes/:id', () => {
+  describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
       const expectedPalette = await database('palettes').first()
       const id = expectedPalette.id
@@ -69,8 +81,8 @@ describe('Server', () => {
       const result = response.body[0]
 
       expect(result).toEqual(expectedPalette)
-    })
-  })
+    });
+  });
 
  
 });

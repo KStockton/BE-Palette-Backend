@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "test": "jest --forceExit",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "seed:run": "knex seed:run --env=test"
   },
   "keywords": [],
   "author": "",
