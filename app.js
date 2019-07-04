@@ -13,26 +13,34 @@ app.use(cors());
 app.use(express.json())
 
 
-// Projects
-// app.get('/', (request, response) => {
-//   response.send('We\'re going to test all the routes!');
-// });
+//Projects
 
 app.get('/api/v1/projects', async (request, response) => {
   try {
     const projects = await database('projects').select()
       if(projects.length) return response.status(200).json(projects)
-      if(!projects.length) return response.status(404).json('Not Found')
   } catch(error) {
       return response.status(500).json({error})
     }
+});
+
+//Get Sepcific Project
+app.get('/api/v1/projects/:id', async (request, response) => {
+  const {id} = request.params
+  try{
+    const project = await database('projects').where('id', id).select()
+    if(project.length) return response.status(200).json(project)
+    if(!project.length) return response.status(404).json({error: `No project found with id of ${id}`})
+  } catch(error) {
+    return response.status(500).json({error})
+  }
 });
 
 app.delete('/api/v1/projects/:id', async (request, response) => {
   const id = request.params.id
   const matchingProject = await database('projects').where('id', id)
 
-  if(!matchingProject.length) return response.status(422).send(`No projects found with  id of ${id}`)
+  if(!matchingProject.length) return response.status(422).json({error:`No projects found with id of ${id}`})
 
   try {
     await database('palettes').where('project_id', id).del()
@@ -42,24 +50,29 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
     response.status(500).json({error})
   }
 })
-
-app.get('/api/v1/projects/:id', async (request, response) => {
-  const {id} = request.params
-  try{
-    const project = await database('projects').where('id', id).select()
-      if(project.length) return response.status(200).json(project)
-      if(!project.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
+app.post('/api/v1/projects', async (request, response) => {
+  const newPost = request.body
+  for(let reqParameter of ['project_title']) {
+    if(!newPost['project_title']) 
+    return response.status(422).json(`Error: Expected format: {project_title: <String>} You are missing ${reqParameter}`)
+  } 
+  try {
+    const updateDatabase =  await database('projects').insert(newPost, 'id').first()
+    return response.status(201).json(updateDatabase)
   } catch(error) {
     return response.status(500).json({error})
   }
 })
 
+app.put('/api/v1/projects/:id', async (request, response) => {
+  const updateRequest = request.body
+  const newUpdateId = request.params.id
 
+  await database('projects').where('id', newUpdateId).update({...updateRequest})
+  let updateResponse = await database('projects').where('id', newUpdateId).first()
 
-
-
-
-
+  return response.status(200).json(updateResponse)
+})
 
 
 

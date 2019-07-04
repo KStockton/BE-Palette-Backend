@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --forceExit",
+    "test:watch": "jest --watchAll",
+    "seed:run": "knex seed:run --env=test"
   },
   "keywords": [],
   "author": "",
