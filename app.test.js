@@ -77,6 +77,49 @@ describe('Server', () => {
       expect(result).toEqual(noMatch)
     });
   });
+
+  describe('POST /api/v1/projects', () => {
+    it('should post a new project', async () => {
+      const addProject = { project_title: 'Team Palette is Lit' }
+      
+      const response = await request(app).post('/api/v1/projects').send(addProject)
+      const result = await database('projects').where('id', response.body.id).first()
+      expect(addProject.project_title).toEqual(result.project_title)
+    });
+
+    it('should give a format error if params are incorrect', async () => {
+      const badProject = { yolo: 'Michael yolo'}
+      const missingParamsMsg = `Expected Format {project_title: <String>} You are missing project_title`
+      const response = await request(app).post('/api/v1/projects').send(badProject)
+      const result = response.body.error
+      expect(result).toEqual(missingParamsMsg)
+    })
+  });
+
+  describe('PUT /api/v1/projects/:id', () => {
+    it('should be able to update a project', async () => {
+      const updateProjId = await database('projects').first()
+      const id = updateProjId.id
+
+      const newTitle = { project_title: 'Michael Hype'}
+      
+      const response = await request(app).put(`/api/v1/projects/${id}`).send(newTitle)
+      const newProject = response.body
+
+      expect(newProject.project_title).toEqual(newTitle.project_title)
+    });
+
+    it('should be give an error message if missing correct params', async () => {
+      const badPut = {title: 'michael jordan Michael Jackson'}
+      const oldProject = await database('projects').first()
+      const id = oldProject.id
+      const expectedErrMsg = `Expected Format {project_title: <String>} You are missing project_title.`
+     
+      const response = await request(app).put(`/api/v1/projects/${id}`).send(badPut)
+      const badPutError = response.body.error
+      expect(badPutError).toEqual(expectedErrMsg)
+    })
+  });
   
   describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
