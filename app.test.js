@@ -6,21 +6,10 @@ const request = require('supertest')
 const app = require('./app')
 
 describe('Server', () => {
+
   beforeEach(async () => {
     await database.seed.run()
   })
-  afterAll(async () => {
-    await database.dropDatabase()
-  })
-
-  // describe('Server', () => {
-  //   describe('init', () => {
-  //     it('should return a 200 status', () => {
-  //       const res = request(app).get('/')
-  //       expect(true).toEqual(true)
-  //     })
-  //   })
-  // })
   
   describe('Get /api/v1/projects', () => {
     it('should return all the projects in the database', async () => {
@@ -120,6 +109,33 @@ describe('Server', () => {
       expect(badPutError).toEqual(expectedErrMsg)
     })
   });
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //Palettes Test
   
   describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
@@ -139,7 +155,5 @@ describe('Server', () => {
     //   it('should delete the palette based on the id', () => {
     //     const expectedPalette
     //   })
-    // })
-
- 
+    // }) 
 });

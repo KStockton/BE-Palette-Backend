@@ -77,6 +77,77 @@ app.put('/api/v1/projects/:id', async (request, response) => {
   return response.status(200).json(result)
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Palettes
 app.get('/api/v1/palettes', async (request, response) => {
   try {
@@ -91,7 +162,7 @@ app.get('/api/v1/palettes', async (request, response) => {
 app.get('/api/v1/palettes/:id', async (request, response) => {
   const {id} = request.params
   try {
-    const palette = await database('palettes').where('id', id).select()
+    const palette = await database('palettes').where('id', id).first()
     if(palette.length) return response.status(200).json(palette)
     if(!palette.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
   } catch(error) {
@@ -111,21 +182,61 @@ app.delete('/api/v1/palettes/:id', async (request, response) => {
   }
 });
 
+// post
+// make sure submission has a palette title. five colors and a project title
+// take the project name to the project table and find a match
+// if match then grab project id
+// if no matching project return project not found 404
+// use the project id as the forign key and format the colors before posting
+// return 201 for successul creation
+// return 500 if server error
 
+ // palette_title: palette.palette_title,
+ //          color_1: palette.color_1,
+ //          color_2: palette.color_2,
+ //          color_3: palette.color_3,
+ //          color_4: palette.color_4,
+ //          color_5: palette.color_5,
+ //          project_id: projectId[0]
 
-// app.post('/api/v1/palettes', async (request, response) => {
-//   const  newProject  = request.body
+app.post('/api/v1/palettes', async (request, response) => {
+ const newPalette = request.body
 
-//   for(let reqParameter of ['project_title']){
-//     if(!newProject[reqParameter] ){
-//       return 
-//         response.status(422).send(`Error: Expected formate: project_title: <String> You're missing a ${reqParameter} property`)
-//     }
-//   }
-//   try {
-//     const projects = await database('projects').insert({newProject})
-//     projects.
-//   }
-// })
+  for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5', 'project_title']) 
+    if(!newPalette[reqParam]) {
+      return response.status(422).json({error: `expected format {
+      palette_title: <String>,
+      color_1: <String>,
+      color_2: <String>,
+      color_3: <String>,
+      color_4: <String>,
+      color_5: <String>,
+      project_title: <String> 
+     } You are missing ${reqParam}`
+    })
+  }
+  
+  const matchingProject = await database('projects').where('project_title', newPalette.project_title).first()
+  const id = matchingProject.id
+ try {
+  if(id) {
+    const postPalette = 
+    {
+      palette_title: newPalette.palette_title,
+      color_1: newPalette.color_1,
+      color_2: newPalette.color_2,
+      color_3: newPalette.color_3,
+      color_4: newPalette.color_4,
+      color_5: newPalette.color_5,
+      project_id : id
+    }
+
+    const result = await database('palettes').insert(postPalette,'id')
+    return response.status(201).json({id: result[0]})
+  }
+ } catch(error) {
+    return response.status(500).json(error.message)
+  }
+});
 
 module.exports = app
