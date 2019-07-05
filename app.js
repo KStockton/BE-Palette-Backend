@@ -52,13 +52,14 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
 })
 app.post('/api/v1/projects', async (request, response) => {
   const newPost = request.body
+
   for(let reqParameter of ['project_title']) {
     if(!newPost['project_title']) 
     return response.status(422).json(`Error: Expected format: {project_title: <String>} You are missing ${reqParameter}`)
   } 
   try {
-    const updateDatabase =  await database('projects').insert(newPost, 'id').first()
-    return response.status(201).json(updateDatabase)
+    const updateDatabase =  await database('projects').insert(newPost, 'id')
+    return response.status(201).json({id: updateDatabase[0]})
   } catch(error) {
     return response.status(500).json({error})
   }

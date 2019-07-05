@@ -77,6 +77,17 @@ describe('Server', () => {
       expect(result).toEqual(noMatch)
     });
   });
+
+  describe('POST /api/v1/projects', () => {
+    it('should post a new project', async () => {
+
+      const addProject = { project_title: 'Team Palette is Lit' }
+      
+      const response = await request(app).post('/api/v1/projects').send(addProject)
+      const result = await database('projects').where('id', response.body.id).first()
+      expect(addProject.project_title).toEqual(result.project_title)
+    })
+  })
   
   describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
