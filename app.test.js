@@ -88,12 +88,26 @@ describe('Server', () => {
     });
 
     it('should give a format error if params are incorrect', async () => {
-      const badProject = { yolo: 'really yolo'}
+      const badProject = { yolo: 'Michael yolo'}
       const missingParamsMsg = `Expected Format {project_title: <String>} You are missing project_title`
       const response = await request(app).post('/api/v1/projects').send(badProject)
       const result = response.body.error
       expect(result).toEqual(missingParamsMsg)
     })
+  });
+
+  describe('PUT /api/v1/projects/:id', () => {
+    it('should be able to update a project', async () => {
+      const updateProjId = await database('projects').first()
+      const id = updateProjId.id
+
+      const newTitle = { project_title: 'Michael Hype'}
+      
+      const response = await request(app).put(`/api/v1/projects/${id}`).send(newTitle)
+      const newProject = response.body
+
+      expect(newProject.project_title).toEqual(newTitle.project_title)
+    });
   });
   
   describe('GET /api/v1/palettes/:id', () => {

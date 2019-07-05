@@ -49,7 +49,8 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
   } catch(error) {
     response.status(500).json({error})
   }
-})
+});
+
 app.post('/api/v1/projects', async (request, response) => {
   const newPost = request.body
 
@@ -70,9 +71,9 @@ app.put('/api/v1/projects/:id', async (request, response) => {
   const newUpdateId = request.params.id
 
   await database('projects').where('id', newUpdateId).update({...updateRequest})
-  let updateResponse = await database('projects').where('id', newUpdateId).first()
+  const result = await database('projects').where('id', newUpdateId).first()
 
-  return response.status(200).json(updateResponse)
+  return response.status(200).json(result)
 })
 
 
