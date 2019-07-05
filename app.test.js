@@ -107,32 +107,23 @@ describe('Server', () => {
       const response = await request(app).put(`/api/v1/projects/${id}`).send(badPut)
       const badPutError = response.body.error
       expect(badPutError).toEqual(expectedErrMsg)
-    })
+    });
+
+    it('should not update a project if the id does not exist', async () => {
+      const goodProj = await database('projects').first()
+      const goodProjTitle = 
+      {
+        project_title: goodProj.project_title
+      }
+
+      const badId = -1
+      const badResponse = `No project found with id of ${badId}`
+
+      const response = await request(app).put(`/api/v1/projects/${badId}`).send(goodProjTitle)
+
+      expect(response.body.error).toEqual(badResponse)
+    });
   });
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
  //Palettes Test
@@ -149,11 +140,44 @@ describe('Server', () => {
 
       expect(result).toEqual(expectedPalette)
     });
+
+    it('should not get a palette if id is not found', async () => {
+      const badId = -1
+      const expectedResponse = `No palette found with id of ${badId}`
+      const response = await request(app).get(`/api/v1/palettes/${badId}`)
+      const receivedRes = response.body.error
+      expect(receivedRes).toEqual(expectedResponse)
+    });
   });
 
-    // describe('DELETE /api/v1/palettes/:id', () => {
-    //   it('should delete the palette based on the id', () => {
-    //     const expectedPalette
-    //   })
-    // }) 
+    describe('DELETE /api/v1/palettes/:id', () => {
+      it('should delete the palette based on the id', async () => {
+        const paletteDelete = await database('palettes').first()
+        const paletteDelId = paletteDelete.id
+        
+        const response = await request(app).delete(`/api/v1/palettes/${paletteDelId}`)
+        expect(response.status).toBe(204)
+      });
+
+      it('should not delete a palette if the palette is not in the database', async () => {
+        const badId = -1
+        const expectedResponse = `No palette found with id of ${badId}`
+        const response = await request(app).delete(`/api/v1/palettes/${badId}`)
+        expect(response.body.error).toEqual(expectedResponse)
+      });
+    });
+
+    describe('GET /api/v1/palettes', () => {
+      it('should be able to get all palettes if the request is good', async () => {
+        const allPalettes = await database('palettes').select()
+            allPalettes.forEach(palette => {
+              palette.created_at = palette.created_at.toJSON()
+              palette.updated_at = palette.updated_at.toJSON()
+            })
+        const response = await request(app).get('/api/v1/palettes')
+        const recPalettes = response.body
+        
+        expect(allPalettes).toEqual(recPalettes)
+      });
+    })
 });
