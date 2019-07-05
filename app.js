@@ -55,7 +55,7 @@ app.post('/api/v1/projects', async (request, response) => {
 
   for(let reqParameter of ['project_title']) {
     if(!newPost['project_title']) 
-    return response.status(422).json(`Error: Expected format: {project_title: <String>} You are missing ${reqParameter}`)
+    return response.status(422).json({ error: `Expected Format {project_title: <String>} You are missing ${reqParameter}`})
   } 
   try {
     const updateDatabase =  await database('projects').insert(newPost, 'id')
