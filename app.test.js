@@ -106,7 +106,11 @@ describe('Server', () => {
       const response = await request(app).put(`/api/v1/projects/${id}`).send(badPut)
       const badPutError = response.body.error
       expect(badPutError).toEqual(expectedErrMsg)
-    })
+    });
+
+    it('should not update a project if params and request body are correct', () => {
+
+    });
   });
   
   describe('GET /api/v1/palettes/:id', () => {
