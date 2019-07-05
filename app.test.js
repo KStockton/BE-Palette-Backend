@@ -6,6 +6,7 @@ const request = require('supertest')
 const app = require('./app')
 
 describe('Server', () => {
+
   beforeEach(async () => {
     await database.seed.run()
   })
@@ -123,6 +124,9 @@ describe('Server', () => {
       expect(response.body.error).toEqual(badResponse)
     });
   });
+
+
+ //Palettes Test
   
   describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
@@ -176,5 +180,4 @@ describe('Server', () => {
         expect(allPalettes).toEqual(recPalettes)
       });
     })
- 
 });
