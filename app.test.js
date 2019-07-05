@@ -110,7 +110,7 @@ describe('Server', () => {
     });
 
     it('should be give an error message if missing correct params', async () => {
-      const badPut = {title: 'michael jordan'}
+      const badPut = {title: 'michael jordan Michael Jackson'}
       const oldProject = await database('projects').first()
       const id = oldProject.id
       const expectedErrMsg = `Expected Format {project_title: <String>} You are missing project_title.`

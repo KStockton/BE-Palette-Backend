@@ -74,6 +74,7 @@ app.put('/api/v1/projects/:id', async (request, response) => {
     if(!updateRequest['project_title']) 
     return response.status(422).json({ error: `Expected Format {project_title: <String>} You are missing ${reqParam}.`})
   }
+  
   await database('projects').where('id', newUpdateId).update({...updateRequest})
   const result = await database('projects').where('id', newUpdateId).first()
 
