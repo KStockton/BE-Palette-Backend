@@ -73,11 +73,10 @@ app.put('/api/v1/projects/:id', async (request, response) => {
   }
 
   try {
-    const isFound = await database('projects').where('id', newUpdateId)
+    const isFound = await database('projects').where('id', newUpdateId).first()
+    
     if (isFound) {
-      await database('projects').where('id', newUpdateId)
-      .update({...updateRequest})
-      .first()
+      await database('projects').where('id', newUpdateId).update({...updateRequest})
       
       const result = await database('projects').where('id', isFound.id).first()
       return response.status(200).json(result)
@@ -179,7 +178,7 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
 app.delete('/api/v1/palettes/:id', async (request, response) => {
   const id = request.params.id
   const matchingPalette = await database('palettes').where('id', id)
-  if(!matchingPalette.length) return response.status(404).json(`No entry matching id: ${id} found`)
+  if(!matchingPalette.length) return response.status(404).json({error: `No palette found with id of ${id}`})
   try {
       await database('palettes').where('id', id).del()
       return response.status(204).send()
