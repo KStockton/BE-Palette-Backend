@@ -226,7 +226,6 @@ app.post('/api/v1/palettes', async (request, response) => {
 
 app.put('/api/v1/palettes/:id', async (request, response) => {
   const updatePalette = request.body
-  console.log(updatePalette)
 
   for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5'])
     if(!updatePalette[reqParam]) {
@@ -242,7 +241,6 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
     } 
     try {
       const isFound = await database('palettes').where('id',parseInt(request.params.id)).first()
-      console.log(isFound)
       if(isFound) {
         await database('palettes').where('id', isFound.id).update({...updatePalette})
       }
