@@ -217,9 +217,8 @@ app.post('/api/v1/palettes', async (request, response) => {
   }
   
   const matchingProject = await database('projects').where('project_title', newPalette.project_title).first()
-  const id = matchingProject.id
  try {
-  if(id) {
+  if(matchingProject) {
     const postPalette = 
     {
       palette_title: newPalette.palette_title,
@@ -228,12 +227,15 @@ app.post('/api/v1/palettes', async (request, response) => {
       color_3: newPalette.color_3,
       color_4: newPalette.color_4,
       color_5: newPalette.color_5,
-      project_id : id
+      project_id : matchingProject.id
     }
 
     const result = await database('palettes').insert(postPalette,'id')
     return response.status(201).json({id: result[0]})
+  } else {
+    return response.status(404).json(`no project found called ${newPalette.project_title}`)
   }
+
  } catch(error) {
     return response.status(500).json(error.message)
   }
