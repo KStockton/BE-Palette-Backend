@@ -6,6 +6,11 @@ Make request to the base url:
 
 ## Projects
 
+| Name | Type | Description |
+| ---- |:----:|:-----------:|
+| id | Integer | Unique ID for each project |
+| project_title | String | Name of the Project |
+
 #### Get ```api/v1/projects``` (All Projects)
 
 The response sends all the projects from the database. 
@@ -29,14 +34,31 @@ Response example:
 ]
 ```
 
-| Name | Type | Description |
-| ---- |:----:|:-----------:|
-| id | Integer | Unique ID for each project |
-| project_title | String | Name of the Project |
+#### Get ```api/v1/projects/:id``` (A Project)
 
+This response sends the requested project from the database. 
+
+Response example:
+
+```  
+[
+    {
+        "id": 3,
+        "project_title": "Kristen's Project",
+        "created_at": "2019-07-02T22:35:05.760Z",
+        "updated_at": "2019-07-02T22:35:05.760Z"
+    },
+]
+```
 
 
 ## Palettes
+
+<!-- | Name | Type | Description |
+| ---- |:----:|:-----------:|
+| id | Integer | Unique ID for each project |
+| project_title | String | Name of the Project | 
+we should put one of these in for palettes-->
 
 #### Get ```api/v1/palettes``` (All Palettes)
 

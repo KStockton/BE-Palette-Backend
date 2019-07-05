@@ -135,5 +135,11 @@ describe('Server', () => {
     });
   });
 
+    // describe('DELETE /api/v1/palettes/:id', () => {
+    //   it('should delete the palette based on the id', () => {
+    //     const expectedPalette
+    //   })
+    // })
+
  
 });
