@@ -9,18 +9,6 @@ describe('Server', () => {
   beforeEach(async () => {
     await database.seed.run()
   })
-  afterAll(async () => {
-    await database.dropDatabase()
-  })
-
-  // describe('Server', () => {
-  //   describe('init', () => {
-  //     it('should return a 200 status', () => {
-  //       const res = request(app).get('/')
-  //       expect(true).toEqual(true)
-  //     })
-  //   })
-  // })
   
   describe('Get /api/v1/projects', () => {
     it('should return all the projects in the database', async () => {
@@ -134,6 +122,7 @@ describe('Server', () => {
       expect(result).toEqual(expectedPalette)
     });
   });
+  
 
     // describe('DELETE /api/v1/palettes/:id', () => {
     //   it('should delete the palette based on the id', () => {

@@ -71,11 +71,81 @@ app.put('/api/v1/projects/:id', async (request, response) => {
     return response.status(422).json({ error: `Expected Format {project_title: <String>} You are missing ${reqParam}.`})
   }
 
-  await database('projects').where('id', newUpdateId).update({...updateRequest})
-  const result = await database('projects').where('id', newUpdateId).first()
-
-  return response.status(200).json(result)
+  try {
+    const isFound = await database('projects').where('id', newUpdateId).first()
+    if(isFound){
+       await database('projects').where('id', newUpdateId).update({...updateRequest})
+      return response.status(200).send()
+    } else if(!isFound) { 
+      return response.status(404).json({error: `No project found with id of ${newUpdateId}`})
+    }
+  } catch(error) {
+    return response.status(500).json({error})
+  }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Palettes
 app.get('/api/v1/palettes', async (request, response) => {
@@ -98,6 +168,75 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
     return response.status(500).json({error})
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.delete('/api/v1/palettes/:id', async (request, response) => {
   const id = request.params.id
