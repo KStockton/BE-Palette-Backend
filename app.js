@@ -26,7 +26,7 @@ app.get('/api/v1/projects/:id', async (request, response) => {
   try{
     const project = await database('projects').where('id', id).select()
     if(project.length) return response.status(200).json(project)
-    if(!project.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
+    if(!project.length) return response.status(404).json({error: `No project found with id of ${id}`})
   } catch(error) {
     return response.status(500).json({error})
   }
