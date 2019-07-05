@@ -108,6 +108,17 @@ describe('Server', () => {
 
       expect(newProject.project_title).toEqual(newTitle.project_title)
     });
+
+    it('should be give an error message if missing correct params', async () => {
+      const badPut = {title: 'michael jordan'}
+      const oldProject = await database('projects').first()
+      const id = oldProject.id
+      const expectedErrMsg = `Expected Format {project_title: <String>} You are missing project_title.`
+     
+      const response = await request(app).put(`/api/v1/projects/${id}`).send(badPut)
+      const badPutError = response.body.error
+      expect(badPutError).toEqual(expectedErrMsg)
+    })
   });
   
   describe('GET /api/v1/palettes/:id', () => {
