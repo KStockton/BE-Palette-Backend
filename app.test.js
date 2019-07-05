@@ -1,7 +1,7 @@
 const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
-
+const projectsData = require('./seedData')
 const request = require('supertest')
 const app = require('./app')
 
@@ -9,15 +9,18 @@ describe('Server', () => {
   beforeEach(async () => {
     await database.seed.run()
   })
-
-  describe('Server', () => {
-    // describe('init', () => {
-    //   it('should return a 200 status', () => {
-    //     const res = request(app).get('/')
-    //     expect(true).toEqual(true)
-    //   })
-    // })
+  afterAll(async () => {
+    await database.dropDatabase()
   })
+
+  // describe('Server', () => {
+  //   describe('init', () => {
+  //     it('should return a 200 status', () => {
+  //       const res = request(app).get('/')
+  //       expect(true).toEqual(true)
+  //     })
+  //   })
+  // })
   
   describe('Get /api/v1/projects', () => {
     it('should return all the projects in the database', async () => {
@@ -29,8 +32,7 @@ describe('Server', () => {
       })
       
       const response = await request(app).get('/api/v1/projects')
-      const projects = response.body
-      
+      const projects = response.body   
       expect(expectedProjects).toEqual(projects)
     })
   })
@@ -43,13 +45,40 @@ describe('Server', () => {
         expectedProject.updated_at = expectedProject.updated_at.toJSON()
 
       const response = await request(app).get(`/api/v1/projects/${id}`)
-      const result = response.body[0]
+      const projectName = response.body[0].project_title
+      expect(projectName).toEqual(expectedProject.project_title)
+    });
 
-      expect(result).toEqual(expectedProject)
-    })
-  })
+    it('should not return a project if there is no match with given id', async () => {
+      const projectId = 0
+      const mockResponse = `No project found with id of ${projectId}`
+      const response = await request(app).get(`/api/v1/projects/${projectId}`)
+      const result = response.body.error
+      expect(result).toEqual(mockResponse)
+    });
+  });
+
+  describe('DELETE /api/v1/projects/:id', () => {
+    it('should delete the project if it exist in the database', async () => {
+      const projectToDelete = await database('projects').first()
+      const id = projectToDelete.id
+      
+      const response = await request(app).delete(`/api/v1/projects/${id}`)
+      const deletedProject = await database('projects').where({id: id}).first()
+      
+      expect(deletedProject).toEqual(undefined)
+    });
+
+    it('should not process the request if params or incorrect', async () => {
+      const nonExistentId = 123456789
+      const noMatch = `No projects found with id of ${nonExistentId}`
+      const response = await request(app).delete(`/api/v1/projects/${nonExistentId}`)
+      const result = response.body.error
+      expect(result).toEqual(noMatch)
+    });
+  });
   
-    describe('GET /api/v1/palettes/:id', () => {
+  describe('GET /api/v1/palettes/:id', () => {
     it('should return a matching palette for the id', async () => {
       const expectedPalette = await database('palettes').first()
       const id = expectedPalette.id
@@ -60,8 +89,8 @@ describe('Server', () => {
       const result = response.body[0]
 
       expect(result).toEqual(expectedPalette)
-    })
-  })
+    });
+  });
 
     // describe('DELETE /api/v1/palettes/:id', () => {
     //   it('should delete the palette based on the id', () => {
