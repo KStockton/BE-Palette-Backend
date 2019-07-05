@@ -17,7 +17,7 @@ app.get('/api/v1/projects', async (request, response) => {
     const projects = await database('projects').select()
       if(projects.length) return response.status(200).json(projects)
   } catch(error) {
-      return response.status(500).json({error})
+      return response.status(500).json(error.message)
     }
 });
 
@@ -28,7 +28,7 @@ app.get('/api/v1/projects/:id', async (request, response) => {
     if(project.length) return response.status(200).json(project)
     if(!project.length) return response.status(404).json({error: `No project found with id of ${id}`})
   } catch(error) {
-    return response.status(500).json({error})
+    return response.status(500).json(error.message)
   }
 });
 
@@ -43,7 +43,7 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
     await database('projects').where('id', id).del() 
     response.status(204).send()
   } catch(error) {
-    response.status(500).json({error})
+    response.status(500).json(error.message)
   }
 });
 
@@ -58,33 +58,109 @@ app.post('/api/v1/projects', async (request, response) => {
     const updateDatabase =  await database('projects').insert(newPost, 'id')
     return response.status(201).json({id: updateDatabase[0]})
   } catch(error) {
-    return response.status(500).json({error})
+    return response.status(500).json(error.message)
   }
 })
 
 app.put('/api/v1/projects/:id', async (request, response) => {
   const updateRequest = request.body
   const newUpdateId = request.params.id
-
-  for(let reqParam of ['project_title']){
-    if(!updateRequest['project_title']) 
-    return response.status(422).json({ error: `Expected Format {project_title: <String>} You are missing ${reqParam}.`})
+  
+  for (let reqParam of ['project_title']) {
+    if (!updateRequest['project_title']) return response.status(422).json({
+      error: `Expected Format {project_title: <String>} You are missing ${reqParam}.`
+    })
   }
 
-  await database('projects').where('id', newUpdateId).update({...updateRequest})
-  const result = await database('projects').where('id', newUpdateId).first()
-
-  return response.status(200).json(result)
+  try {
+    const isFound = await database('projects').where('id', newUpdateId).first()
+    
+    if (isFound) {
+      await database('projects').where('id', newUpdateId).update({...updateRequest})
+      
+      const result = await database('projects').where('id', isFound.id).first()
+      return response.status(200).json(result)
+    } else if (!isFound) {
+      return response.status(404).json({
+        error: `No project found with id of ${newUpdateId}`
+      })
+    }
+  } catch (error) {
+    return response.status(500).json(error.message)
+  }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Palettes
 app.get('/api/v1/palettes', async (request, response) => {
   try {
     const palettes = await database('palettes').select()
       if(palettes.length) return response.status(200).json(palettes)
-      if(!palettes.length) return response.status(404).json('No Palettes Found')
   } catch(error) {
-      return response.status(500).json({error})
+      return response.status(500).json(error.message)
   }
 })
 
@@ -93,39 +169,69 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
   try {
     const palette = await database('palettes').where('id', id).select()
     if(palette.length) return response.status(200).json(palette)
-    if(!palette.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
+    if(!palette.length) return response.status(404).json({error:`No palette found with id of ${id}`})
   } catch(error) {
-    return response.status(500).json({error})
+    return response.status(500).json(error.message)
   }
 });
 
 app.delete('/api/v1/palettes/:id', async (request, response) => {
   const id = request.params.id
   const matchingPalette = await database('palettes').where('id', id)
-  if(!matchingPalette.length) return response.status(404).json(`No entry matching id: ${id} found`)
+  if(!matchingPalette.length) return response.status(404).json({error: `No palette found with id of ${id}`})
   try {
       await database('palettes').where('id', id).del()
       return response.status(204).send()
   } catch(error) {
-      return response.status(500).json({error})
+      return response.status(500).json(error.message)
   }
 });
 
 
 
-// app.post('/api/v1/palettes', async (request, response) => {
-//   const  newProject  = request.body
 
-//   for(let reqParameter of ['project_title']){
-//     if(!newProject[reqParameter] ){
-//       return 
-//         response.status(422).send(`Error: Expected formate: project_title: <String> You're missing a ${reqParameter} property`)
-//     }
-//   }
-//   try {
-//     const projects = await database('projects').insert({newProject})
-//     projects.
-//   }
-// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = app
