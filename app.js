@@ -162,9 +162,9 @@ app.get('/api/v1/palettes', async (request, response) => {
 app.get('/api/v1/palettes/:id', async (request, response) => {
   const {id} = request.params
   try {
-    const palette = await database('palettes').where('id', id).first()
+    const palette = await database('palettes').where('id', id).select()
     if(palette.length) return response.status(200).json(palette)
-    if(!palette.length) return response.status(404).json(`{Error: No palette found with ${id}}`)
+    if(!palette.length) return response.status(404).json({error: `no palette found with and id of ${id}`})
   } catch(error) {
     return response.status(500).json({error})
   }
@@ -222,6 +222,33 @@ app.post('/api/v1/palettes', async (request, response) => {
  } catch(error) {
     return response.status(500).json(error.message)
   }
+});
+
+app.put('/api/v1/palette/:id', async (request, response) => {
+  const updatePalette = request.body
+  const id = updatePalette.params.id
+
+  for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5'])
+    if(!newPalette[reqParam]) {
+      return response.status(422).json({error: `expected format {
+      palette_title: <String>,
+      color_1: <String>,
+      color_2: <String>,
+      color_3: <String>,
+      color_4: <String>,
+      color_5: <String>,
+     } You are missing ${reqParam}`
+    })
+
+  // for(let reqParam of ['project_title']){
+  //   if(!updateRequest['project_title']) 
+  //   return response.status(422).json({ error: `Expected Format {project_title: <String>} You are missing ${reqParam}.`})
+  // }
+
+  // await database('projects').where('id', newUpdateId).update({...updateRequest})
+  // const result = await database('projects').where('id', newUpdateId).first()
+
+  // return response.status(200).json(result)
 });
 
 module.exports = app
