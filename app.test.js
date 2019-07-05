@@ -136,8 +136,15 @@ describe('Server', () => {
 
       expect(result).toEqual(expectedPalette)
     });
+
+    it('should not get a palette if id is not found', async () => {
+      const badId = -1
+      const expectedResponse = `No palette found with id of ${badId}`
+      const response = await request(app).get(`/api/v1/palettes/${badId}`)
+      const receivedRes = response.body.error
+      expect(receivedRes).toEqual(expectedResponse)
+    });
   });
-  
 
     describe('DELETE /api/v1/palettes/:id', () => {
       it('should delete the palette based on the id', async () => {
@@ -154,7 +161,20 @@ describe('Server', () => {
         const response = await request(app).delete(`/api/v1/palettes/${badId}`)
         expect(response.body.error).toEqual(expectedResponse)
       });
-    })
+    });
 
+    describe('GET /api/v1/palettes', () => {
+      it('should be able to get all palettes if the request is good', async () => {
+        const allPalettes = await database('palettes').select()
+            allPalettes.forEach(palette => {
+              palette.created_at = palette.created_at.toJSON()
+              palette.updated_at = palette.updated_at.toJSON()
+            })
+        const response = await request(app).get('/api/v1/palettes')
+        const recPalettes = response.body
+        
+        expect(allPalettes).toEqual(recPalettes)
+      });
+    })
  
 });
