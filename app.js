@@ -182,23 +182,6 @@ app.delete('/api/v1/palettes/:id', async (request, response) => {
   }
 });
 
-// post
-// make sure submission has a palette title. five colors and a project title
-// take the project name to the project table and find a match
-// if match then grab project id
-// if no matching project return project not found 404
-// use the project id as the forign key and format the colors before posting
-// return 201 for successul creation
-// return 500 if server error
-
- // palette_title: palette.palette_title,
- //          color_1: palette.color_1,
- //          color_2: palette.color_2,
- //          color_3: palette.color_3,
- //          color_4: palette.color_4,
- //          color_5: palette.color_5,
- //          project_id: projectId[0]
-
 app.post('/api/v1/palettes', async (request, response) => {
  const newPalette = request.body
 
