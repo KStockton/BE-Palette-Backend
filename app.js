@@ -224,31 +224,34 @@ app.post('/api/v1/palettes', async (request, response) => {
   }
 });
 
-app.put('/api/v1/palette/:id', async (request, response) => {
+app.put('/api/v1/palettes/:id', async (request, response) => {
   const updatePalette = request.body
-  const id = updatePalette.params.id
+  console.log(updatePalette)
 
   for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5'])
-    if(!newPalette[reqParam]) {
+    if(!updatePalette[reqParam]) {
       return response.status(422).json({error: `expected format {
-      palette_title: <String>,
-      color_1: <String>,
-      color_2: <String>,
-      color_3: <String>,
-      color_4: <String>,
-      color_5: <String>,
-     } You are missing ${reqParam}`
-    })
+        palette_title: <String>,
+        color_1: <String>,
+        color_2: <String>,
+        color_3: <String>,
+        color_4: <String>,
+        color_5: <String>,
+       } You are missing ${reqParam}`
+      })
+    } 
+    try {
+      const isFound = await database('palettes').where('id',parseInt(request.params.id)).first()
+      console.log(isFound)
+      if(isFound) {
+        await database('palettes').where('id', isFound.id).update({...updatePalette})
+      }
 
-  // for(let reqParam of ['project_title']){
-  //   if(!updateRequest['project_title']) 
-  //   return response.status(422).json({ error: `Expected Format {project_title: <String>} You are missing ${reqParam}.`})
-  // }
+    } catch(error) {
+        return response.status(500).json(error.message)
+    }
 
-  // await database('projects').where('id', newUpdateId).update({...updateRequest})
-  // const result = await database('projects').where('id', newUpdateId).first()
-
-  // return response.status(200).json(result)
+  
 });
 
 module.exports = app
