@@ -178,7 +178,14 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
     try {
       const isFound = await database('palettes').where('id',parseInt(request.params.id)).first()
       if(isFound) {
-        await database('palettes').where('id', isFound.id).update({...updatePalette})
+        const result = await database('palettes').where('id', isFound.id).update({...updatePalette})
+        const updatePaletted = await database('palettes').where('id', isFound.id)
+        console.log('isfound', isFound)
+        console.log('result', result )
+        console.log('update', updatePaletted)
+        return response.status(200).json(isFound)
+      } else if(!isFound) {
+        return response.status(404).json(`No palette found with id of ${request.params.id}`)
       }
     } catch(error) {
         return response.status(500).json(error.message)

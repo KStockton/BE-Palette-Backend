@@ -229,4 +229,24 @@ describe('Server', () => {
         expect(response.body).toEqual(expectedResponse)
       })
     });
+    describe('PUT ap1/v1/palettes/:id', () => {
+      beforeEach( async () => {
+        let palette = await database('palettes').first()
+      })
+      it('should be able to update a single palette', async () => {
+        let paletteID = palette.id
+        let paletteChange = {
+          palette_title: palette.palette_title,
+          color_1: palette.color_3,
+          color_2: palette.color_3,
+          color_3: palette.color_3,
+          color_4: palette.color_3,
+          color_5: palette.color_3
+        }
+        // const expectedResponse = 
+        const response = request(app).put(`/api/v1/palettes/${paletteID}`).send(paletteChange)
+      
+      })
+    });
+
 });
