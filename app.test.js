@@ -245,14 +245,31 @@ describe('Server', () => {
         }
         const response = await request(app).put(`/api/v1/palettes/${paletteId}`).send(paletteChange)
         const result = response.body
-        
+
         expect(result.palette_title).toEqual(paletteChange.palette_title)
         expect(result.color_1).toEqual(paletteChange.color_1)
         expect(result.color_2).toEqual(paletteChange.color_2)
         expect(result.color_3).toEqual(paletteChange.color_3)
         expect(result.color_4).toEqual(paletteChange.color_4)
         expect(result.color_5).toEqual(paletteChange.color_5)
-      })
-      // const expectedResponse = `No palette found with id of ${paletteId}`
+      });
+
+      it('should return a no found response if id does not exist', async() => {
+        const badId = -1
+        const palette = await database('palettes').first()
+        const paletteChange = {
+          palette_title: palette.palette_title,
+          color_1: palette.color_3,
+          color_2: palette.color_3,
+          color_3: palette.color_3,
+          color_4: palette.color_3,
+          color_5: palette.color_3
+        }
+
+        const expectedResponse = `No palette found with id of ${badId}`
+        const response = await request(app).put(`/api/v1/palettes/${badId}`).send(paletteChange)
+        const errMsg = response.body
+        expect(errMsg).toEqual(expectedResponse)
+      });
     });
 });
