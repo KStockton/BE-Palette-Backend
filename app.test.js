@@ -268,7 +268,7 @@ describe('Server', () => {
 
         const expectedResponse = `No palette found with id of ${badId}`
         const response = await request(app).put(`/api/v1/palettes/${badId}`).send(paletteChange)
-        const errMsg = response.body
+        const errMsg = response.body.error
         expect(errMsg).toEqual(expectedResponse)
       });
     });

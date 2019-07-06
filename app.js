@@ -183,7 +183,7 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
         const result = await database('palettes').where('id', isFound.id).first()
         return response.status(200).json(result)
       } else if(!isFound) {
-        return response.status(404).json(`No palette found with id of ${request.params.id}`)
+        return response.status(404).json({error:`No palette found with id of ${request.params.id}`})
       }
     } catch(error) {
         return response.status(500).json(error.message)
