@@ -179,5 +179,28 @@ describe('Server', () => {
         
         expect(allPalettes).toEqual(recPalettes)
       });
-    })
+    });
+
+    describe('POST /api/v1/palettes', () => {
+      it('should be able to post a new palette', async () => {
+        const project = await database('projects').first()
+
+        const newPalette = 
+        {
+          palette_title: 'M and K project',
+          color_1: '#jnd094',
+          color_2: '#vn9sdv',
+          color_3: '#jasdfk',
+          color_4: '#iifgkd',
+          color_5: '#snasdg',
+          project_title: project.project_title
+        }
+
+        const response = await request(app).post('/api/v1/palettes/').send(newPalette)
+        const results = await database('palettes').where('id', response.body.id)
+        const palette = results[0]
+       
+        expect(newPalette.palette_title).toEqual(palette.palette_title)
+      })
+    });
 });
