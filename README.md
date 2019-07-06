@@ -234,6 +234,7 @@ Example put before request:
 
 Example Request: 
 
+```
 {
 	"palette_title": "Summer",
 	"color_1": "#test",
@@ -242,6 +243,7 @@ Example Request:
 	"color_4": "#test",
 	"color_5": "same"
 }
+```
 
 Example response:
 
