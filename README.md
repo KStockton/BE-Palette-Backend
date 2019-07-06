@@ -193,6 +193,28 @@ Example Response:
 
 A user can post a new palette to the database.
 
+Example post:
+
+```
+{
+    "palette_title": "Summer Breeze",
+    "color_1": "#6deef9",
+    "color_2": "#eac761",
+    "color_3": "#50c1b9",
+    "color_4": "#bcbc45",
+    "color_5": "#535275",
+    "project_title": "Michael Strikes Back"
+}
+```
+
+Response example: 
+
+```
+{
+    "id": 5086
+}
+```
+
 #### PUT ```/api/v1/palettes/:id``` (Update a palette)
 
 A user can update a palette within the database.
