@@ -202,5 +202,18 @@ describe('Server', () => {
        
         expect(newPalette.palette_title).toEqual(palette.palette_title)
       })
+
+      it('should not post if params are incorrect', async () => {
+        const badPalette = { palette_title: 'Mic' }
+
+        expectedError = {error: `expected format {palette_title: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String>, project_title: <String> } You are missing color_1`
+        }
+
+        const response = await request(app).post('/api/v1/palettes').send(badPalette)
+        console.log('response.body', response.body)
+        expect(response.body.error).toEqual(expectedError.error)
+      });
+
+
     });
 });

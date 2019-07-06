@@ -131,15 +131,7 @@ app.post('/api/v1/palettes', async (request, response) => {
 
   for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5', 'project_title']) 
     if(!newPalette[reqParam]) {
-      return response.status(422).json({error: `expected format {
-      palette_title: <String>,
-      color_1: <String>,
-      color_2: <String>,
-      color_3: <String>,
-      color_4: <String>,
-      color_5: <String>,
-      project_title: <String> 
-     } You are missing ${reqParam}`
+      return response.status(422).json({error: `expected format {palette_title: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String>, project_title: <String> } You are missing ${reqParam}`
     })
   }
   
