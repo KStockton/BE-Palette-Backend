@@ -50,6 +50,30 @@ Response example:
     },
 ]
 ```
+#### POST ```api/v1/projects``` (Post a new project)
+
+A user can post a new project. Must be formatted in JSON with correct ```project_title``` key.
+
+| Name | Type | Description |
+| ---- |:----:|:-----------:|
+| project_title | String | Name of the Project |
+
+Example post:
+
+```
+{
+    "project_title": "Support our Schools"
+}
+```
+
+Response example: 
+
+```
+{
+    "id": 5086
+}
+```
+
 
 #### Delete ```api/v1/projects/:id``` (Delete a single project)
 
