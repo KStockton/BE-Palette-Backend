@@ -229,13 +229,13 @@ describe('Server', () => {
         expect(response.body).toEqual(expectedResponse)
       })
     });
+
     describe('PUT ap1/v1/palettes/:id', () => {
-      beforeEach( async () => {
-        let palette = await database('palettes').first()
-      })
       it('should be able to update a single palette', async () => {
-        let paletteID = palette.id
-        let paletteChange = {
+        const palette = await database('palettes').first()
+        const paletteId = palette.id
+
+        const paletteChange = {
           palette_title: palette.palette_title,
           color_1: palette.color_3,
           color_2: palette.color_3,
@@ -243,10 +243,16 @@ describe('Server', () => {
           color_4: palette.color_3,
           color_5: palette.color_3
         }
-        // const expectedResponse = 
-        const response = request(app).put(`/api/v1/palettes/${paletteID}`).send(paletteChange)
-      
+        const response = await request(app).put(`/api/v1/palettes/${paletteId}`).send(paletteChange)
+        const result = response.body
+        
+        expect(result.palette_title).toEqual(paletteChange.palette_title)
+        expect(result.color_1).toEqual(paletteChange.color_1)
+        expect(result.color_2).toEqual(paletteChange.color_2)
+        expect(result.color_3).toEqual(paletteChange.color_3)
+        expect(result.color_4).toEqual(paletteChange.color_4)
+        expect(result.color_5).toEqual(paletteChange.color_5)
       })
+      // const expectedResponse = `No palette found with id of ${paletteId}`
     });
-
 });

@@ -160,10 +160,10 @@ app.post('/api/v1/palettes', async (request, response) => {
 });
 
 app.put('/api/v1/palettes/:id', async (request, response) => {
-  const updatePalette = request.body
+  const modifiedPalette = request.body
 
   for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5'])
-    if(!updatePalette[reqParam]) {
+    if(!modifiedPalette[reqParam]) {
       return response.status(422).json({error: `expected format {
         palette_title: <String>,
         color_1: <String>,
@@ -177,13 +177,11 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
 
     try {
       const isFound = await database('palettes').where('id',parseInt(request.params.id)).first()
+      
       if(isFound) {
-        const result = await database('palettes').where('id', isFound.id).update({...updatePalette})
-        const updatePaletted = await database('palettes').where('id', isFound.id)
-        console.log('isfound', isFound)
-        console.log('result', result )
-        console.log('update', updatePaletted)
-        return response.status(200).json(isFound)
+        await database('palettes').where('id', isFound.id).update({...modifiedPalette})
+        const result = await database('palettes').where('id', isFound.id).first()
+        return response.status(200).json(result)
       } else if(!isFound) {
         return response.status(404).json(`No palette found with id of ${request.params.id}`)
       }
