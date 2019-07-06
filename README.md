@@ -51,6 +51,11 @@ Response example:
 ]
 ```
 
+#### Delete ```api/v1/projects/:id``` (Delete a single project)
+
+A user can delete a specific project and associated plattes
+
+Response is 204 status code.
 
 ## Palettes
 
