@@ -210,10 +210,23 @@ describe('Server', () => {
         }
 
         const response = await request(app).post('/api/v1/palettes').send(badPalette)
-        console.log('response.body', response.body)
         expect(response.body.error).toEqual(expectedError.error)
       });
 
-
+      it('should not return a palette if project_title is not found', async () => {
+        const newPalette = 
+        {
+          palette_title: 'M and K project',
+          color_1: '#jnd094',
+          color_2: '#vn9sdv',
+          color_3: '#jasdfk',
+          color_4: '#iifgkd',
+          color_5: '#snasdg',
+          project_title: 'Black Panther Colors'
+        }
+        const expectedResponse = `No project found called ${newPalette.project_title}`
+        const response = await request(app).post('/api/v1/palettes/').send(newPalette)
+        expect(response.body).toEqual(expectedResponse)
+      })
     });
 });
