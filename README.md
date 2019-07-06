@@ -74,6 +74,32 @@ Response example:
 }
 ```
 
+#### PUT ```api/v1/projects/:id``` (Update a single project)
+
+A user can update a project title. Project title must exist.
+
+| Name | Type | Description |
+| ---- |:----:|:-----------:|
+| project_title | String | Name of the Project |
+
+Example put:
+
+```
+{
+	"project_title": "Backup Website Colors"
+}
+```
+
+Example Response:
+
+```
+{
+    "id": 5085,
+    "project_title": "Backup Website Colors",
+    "created_at": "2019-07-06T19:03:07.669Z",
+    "updated_at": "2019-07-06T19:03:07.669Z"
+}
+```
 
 #### Delete ```api/v1/projects/:id``` (Delete a single project)
 
