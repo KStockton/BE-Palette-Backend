@@ -109,11 +109,17 @@ Response is 204 status code.
 
 ## Palettes
 
-<!-- | Name | Type | Description |
+| Name | Type | Description |
 | ---- |:----:|:-----------:|
 | id | Integer | Unique ID for each project |
-| project_title | String | Name of the Project | 
-we should put one of these in for palettes-->
+| project_title | String | Name of the Project |
+| color_1 | String | Hex color |
+| color_2 | String | Hex color |
+| color_3 | String | Hex color |
+| color_4 | String | Hex color |
+| color_5 | String | Hex color |
+| palette_title | String | Name of the Palette |
+
 
 #### Get ```api/v1/palettes``` (All Palettes)
 
@@ -162,7 +168,7 @@ The response sends all the palettes from the database.
 
 #### Get ```api/v1/palettes/:id``` (Specific Palette)
 
-The response sends a single palette from the database if it exist
+The response sends a single palette from the database if it exist.
 
 Example Response:
 
@@ -182,6 +188,21 @@ Example Response:
     }
 ]
 ```
+
+#### POST ```/api/v1/palettes ``` (Post a new palette)
+
+A user can post a new palette to the database.
+
+#### PUT ```/api/v1/palettes/:id``` (Update a palette)
+
+A user can update a palette within the database.
+
+#### DELETE ```/api/v1/pallettes/:id ``` (Delete a palette)
+
+A user can delete a palette from the database.
+
+Response is 204 status code.
+
 
 
 ## Contributors
