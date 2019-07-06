@@ -90,9 +90,6 @@ app.put('/api/v1/projects/:id', async (request, response) => {
   }
 });
 
-
-
-
 // Palettes
 app.get('/api/v1/palettes', async (request, response) => {
   try {
@@ -189,5 +186,7 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
         return response.status(500).json(error.message)
     }
 });
+
+
 
 module.exports = app
