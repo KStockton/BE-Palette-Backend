@@ -219,12 +219,52 @@ Response example:
 
 A user can update a palette within the database.
 
+Example put before request:
+
+```
+{
+	"palette_title": "Summer Breeze",
+	"color_1": "#31kf3",
+	"color_2": "#42393",
+	"color_3": "#82848",
+	"color_4": "#93590",
+	"color_5": "#8590m"
+}
+```
+
+Example Request: 
+
+{
+	"palette_title": "Summer",
+	"color_1": "#test",
+	"color_2": "#test",
+	"color_3": "#test",
+	"color_4": "#test",
+	"color_5": "same"
+}
+
+Example response:
+
+```
+{
+    "id": 7450,
+    "palette_title": "Summer",
+    "color_1": "#test",
+    "color_2": "#test",
+    "color_3": "#test",
+    "color_4": "#test",
+    "color_5": "same",
+    "project_id": 5086,
+    "created_at": "2019-07-06T19:54:57.991Z",
+    "updated_at": "2019-07-06T19:54:57.991Z"
+}
+```
+
 #### DELETE ```/api/v1/pallettes/:id ``` (Delete a palette)
 
 A user can delete a palette from the database.
 
 Response is 204 status code.
-
 
 
 ## Contributors
