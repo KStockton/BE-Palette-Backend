@@ -131,20 +131,12 @@ app.post('/api/v1/palettes', async (request, response) => {
 
   for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5', 'project_title']) 
     if(!newPalette[reqParam]) {
-      return response.status(422).json({error: `expected format {
-      palette_title: <String>,
-      color_1: <String>,
-      color_2: <String>,
-      color_3: <String>,
-      color_4: <String>,
-      color_5: <String>,
-      project_title: <String> 
-     } You are missing ${reqParam}`
+      return response.status(422).json({error: `expected format {palette_title: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String>, project_title: <String> } You are missing ${reqParam}`
     })
   }
-  
   const matchingProject = await database('projects').where('project_title', newPalette.project_title).first()
- try {
+ 
+  try {
   if(matchingProject) {
     const postPalette = 
     {
@@ -160,20 +152,18 @@ app.post('/api/v1/palettes', async (request, response) => {
     const result = await database('palettes').insert(postPalette,'id')
     return response.status(201).json({id: result[0]})
   } else {
-    return response.status(404).json(`no project found called ${newPalette.project_title}`)
+    return response.status(404).json(`No project found called ${newPalette.project_title}`)
   }
-
-
  } catch(error) {
     return response.status(500).json(error.message)
   }
 });
 
 app.put('/api/v1/palettes/:id', async (request, response) => {
-  const updatePalette = request.body
+  const modifiedPalette = request.body
 
   for(let reqParam of ['palette_title', 'color_1', 'color_2', 'color_3', 'color_4', 'color_5'])
-    if(!updatePalette[reqParam]) {
+    if(!modifiedPalette[reqParam]) {
       return response.status(422).json({error: `expected format {
         palette_title: <String>,
         color_1: <String>,
@@ -184,17 +174,20 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
        } You are missing ${reqParam}`
       })
     } 
+
     try {
       const isFound = await database('palettes').where('id',parseInt(request.params.id)).first()
+      
       if(isFound) {
-        await database('palettes').where('id', isFound.id).update({...updatePalette})
+        await database('palettes').where('id', isFound.id).update({...modifiedPalette})
+        const result = await database('palettes').where('id', isFound.id).first()
+        return response.status(200).json(result)
+      } else if(!isFound) {
+        return response.status(404).json({error:`No palette found with id of ${request.params.id}`})
       }
-
     } catch(error) {
         return response.status(500).json(error.message)
     }
-
-  
 });
 
 module.exports = app

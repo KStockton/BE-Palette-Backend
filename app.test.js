@@ -179,5 +179,97 @@ describe('Server', () => {
         
         expect(allPalettes).toEqual(recPalettes)
       });
-    })
+    });
+
+    describe('POST /api/v1/palettes', () => {
+      it('should be able to post a new palette', async () => {
+        const project = await database('projects').first()
+
+        const newPalette = 
+        {
+          palette_title: 'M and K project',
+          color_1: '#jnd094',
+          color_2: '#vn9sdv',
+          color_3: '#jasdfk',
+          color_4: '#iifgkd',
+          color_5: '#snasdg',
+          project_title: project.project_title
+        }
+
+        const response = await request(app).post('/api/v1/palettes/').send(newPalette)
+        const results = await database('palettes').where('id', response.body.id)
+        const palette = results[0]
+       
+        expect(newPalette.palette_title).toEqual(palette.palette_title)
+      })
+
+      it('should not post if params are incorrect', async () => {
+        const badPalette = { palette_title: 'Mic' }
+
+        expectedError = {error: `expected format {palette_title: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String>, project_title: <String> } You are missing color_1`
+        }
+
+        const response = await request(app).post('/api/v1/palettes').send(badPalette)
+        expect(response.body.error).toEqual(expectedError.error)
+      });
+
+      it('should not return a palette if project_title is not found', async () => {
+        const newPalette = 
+        {
+          palette_title: 'M and K project',
+          color_1: '#jnd094',
+          color_2: '#vn9sdv',
+          color_3: '#jasdfk',
+          color_4: '#iifgkd',
+          color_5: '#snasdg',
+          project_title: 'Black Panther Colors'
+        }
+        const expectedResponse = `No project found called ${newPalette.project_title}`
+        const response = await request(app).post('/api/v1/palettes/').send(newPalette)
+        expect(response.body).toEqual(expectedResponse)
+      })
+    });
+
+    describe('PUT ap1/v1/palettes/:id', () => {
+      it('should be able to update a single palette', async () => {
+        const palette = await database('palettes').first()
+        const paletteId = palette.id
+
+        const paletteChange = {
+          palette_title: palette.palette_title,
+          color_1: palette.color_3,
+          color_2: palette.color_3,
+          color_3: palette.color_3,
+          color_4: palette.color_3,
+          color_5: palette.color_3
+        }
+        const response = await request(app).put(`/api/v1/palettes/${paletteId}`).send(paletteChange)
+        const result = response.body
+
+        expect(result.palette_title).toEqual(paletteChange.palette_title)
+        expect(result.color_1).toEqual(paletteChange.color_1)
+        expect(result.color_2).toEqual(paletteChange.color_2)
+        expect(result.color_3).toEqual(paletteChange.color_3)
+        expect(result.color_4).toEqual(paletteChange.color_4)
+        expect(result.color_5).toEqual(paletteChange.color_5)
+      });
+
+      it('should return a no found response if id does not exist', async() => {
+        const badId = -1
+        const palette = await database('palettes').first()
+        const paletteChange = {
+          palette_title: palette.palette_title,
+          color_1: palette.color_3,
+          color_2: palette.color_3,
+          color_3: palette.color_3,
+          color_4: palette.color_3,
+          color_5: palette.color_3
+        }
+
+        const expectedResponse = `No palette found with id of ${badId}`
+        const response = await request(app).put(`/api/v1/palettes/${badId}`).send(paletteChange)
+        const errMsg = response.body.error
+        expect(errMsg).toEqual(expectedResponse)
+      });
+    });
 });
