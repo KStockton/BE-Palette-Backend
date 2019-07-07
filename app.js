@@ -10,6 +10,10 @@ app.use(cors());
 
 app.use(express.json())
 
+app.get('/', async () => {
+  return response.status(200).json('Ready to begin')
+})
+
 app.get('/api/v1/projects', async (request, response) => {
   try {
     const projects = await database('projects').select()
