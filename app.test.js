@@ -285,6 +285,14 @@ describe('Server', () => {
         const hexCode = '6deef9'
         const response = await request(app).get(`/api/v1/projects/${projectId}/palettes?${hexCode}`)
         expect(response.body.matchingPalettes.length).toEqual(expectedPalettes)
-      })
+      });
+
+      it('should not find hex code if projectId is not in database', async () => {
+        const badId = -1
+        const hexCode = '6deef9'
+        const expectedResponse = `No hex code found with the project id of ${badId}`
+        const response = await request(app).get(`/api/v1/projects/${badId}/palettes?${hexCode}`)
+        expect(response.body.error).toEqual(expectedResponse)
+      });
     })
 });
