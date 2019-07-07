@@ -2,7 +2,7 @@
   "name": "be-pallet-picker",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "knexfile.js",
   "scripts": {
     "start": "node server.js",
     "test": "jest --forceExit",
