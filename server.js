@@ -1,9 +1,9 @@
 const app = require('./app');
 
-app.set('port', process.env.PORT || 3001);
+const PORT = process.env.PORT || 3001;
 
-app.listen(app.get('port'), () => {
-  console.log(`App is 🏃‍💨 running on http://localhost:${app.get('port')}`)
+app.listen(PORT, () => {
+  console.log(`App is 🏃‍💨 running on http://localhost:${PORT}`)
 });
 
 module.exports = app
