@@ -4,7 +4,7 @@ const database = require('knex')(configuration);
 const express = require('express');
 // const bodyParser = require('body-parser');
 const app = express();
-app.set("port", process.env.PORT || 30001)
+app.set("port", process.env.PORT || 3001)
 
 
 const cors = require('cors');
@@ -187,6 +187,29 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
     }
 });
 
+//Palettes for matching projects
+app.get('/api/v1/projects/:id/palettes', async (request, response) => {
+  const projectId = request.params.id
+  const queryHexCodes = request.params.hex
 
+  let paletteColors = await database('palettes').where('project_id', projectId)
+
+  if(queryHexCodes){
+    paletteColors = paletteColors.filter(hexcode => {
+      const {color_1, color_2, color_3, color_4, color_5 } = hexcode
+      const colors = [color_1, color_2, color_3, color_4, color_5]
+      return colors.some(color => color === queryHexCodes)
+    })
+  } 
+  try {
+    if(paletteColors.length){
+      return response.status(200).json({ matchingPalettes: paletteColors })
+    } else if (!paletteColors.length) {
+      return response.status(404).json({error: `No hex code found with the project id of ${projectId}`})
+    }
+  } catch(error) {
+    return response.status(500).json(error.message)
+  }
+});
 
 module.exports = app

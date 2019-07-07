@@ -272,4 +272,19 @@ describe('Server', () => {
         expect(errMsg).toEqual(expectedResponse)
       });
     });
+
+    describe('GET /api/v1/projects/:id/palettes', () => {
+      it('should be able to query a project for a specific palette', async() => {
+        const  project = await database('projects').first()
+        const projectId = project.id
+
+        const expectedPalettes = projectsData.find(proj => {
+          return proj.project_title === project.project_title
+        }).palettes.length
+        
+        const hexCode = '6deef9'
+        const response = await request(app).get(`/api/v1/projects/${projectId}/palettes?${hexCode}`)
+        expect(response.body.matchingPalettes.length).toEqual(expectedPalettes)
+      })
+    })
 });
