@@ -10,8 +10,8 @@ app.use(cors());
 
 app.use(express.json())
 
-app.get('/', (request, response) => {
-  return response.status(200).json('Ready to begin')
+app.get('/', function(request, response) {
+  response.send('Ready to begin')
 })
 
 app.get('/api/v1/projects', async (request, response) => {
