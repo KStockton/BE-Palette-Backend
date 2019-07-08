@@ -9,3 +9,4 @@ before_script:
   - knex seed:run --env=test
 notifications:
   email: false
+
