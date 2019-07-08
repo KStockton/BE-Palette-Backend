@@ -10,7 +10,7 @@ app.use(cors());
 
 app.use(express.json())
 
-app.get('/', async (request, response) => {
+app.get('/', async (req, response) => {
   return response.status(200).json('Ready to begin')
 })
 
