@@ -67,7 +67,7 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
 
 app.post('/api/v1/projects', async (request, response) => {
   const newPost = request.body;
-
+  console.log(newPost) 
   for (let reqParameter of ['project_title']) {
     if (!newPost['project_title']) {
       return response.status(422).json({ 
