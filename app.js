@@ -75,8 +75,11 @@ app.post('/api/v1/projects', async (request, response) => {
         You are missing ${reqParameter}`});
     }
   } 
+  const cleanedTitle = cleanUpTitle(newPost);
+
   try {
-    const updateDatabase =  await database('projects').insert(newPost, 'id');
+    const updateDatabase =  await database('projects')
+      .insert(cleanedTitle, 'id');
 
     return response.status(201).json({id: updateDatabase[0]});
   } catch (error) {
@@ -183,8 +186,10 @@ app.post('/api/v1/palettes', async (request, response) => {
       });
     }
   }
+  const cleanedTitle = cleanUpTitle(newPalette);
+
   const matchingProject = await database('projects')
-    .where('project_title', newPalette.project_title)
+    .where('project_title', cleanedTitle.project_title)
     .first();
  
   try {
@@ -278,5 +283,14 @@ app.get('/api/v1/projects/:id/palettes', async (request, response) => {
     return response.status(500).json(error.message);
   }
 });
+
+const cleanUpTitle = (dirtyTitle) => {
+  const cleanTitle = dirtyTitle.project_title
+    .replace(/[^a-zA-Z0-9 ]/g, "").split(' ');
+  const  uppercaseTitle = cleanTitle.map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+  return { project_title: uppercaseTitle};
+};
 
 module.exports = app;
