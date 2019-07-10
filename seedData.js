@@ -1,6 +1,6 @@
 const projectsData = [
   {
-    project_title: 'Kristen\'s Project',
+    project_title: 'Kristens Project',
     palettes: [
       {
         palette_title: 'Summer Breeze',
@@ -20,19 +20,19 @@ const projectsData = [
       }
     ]
   },
- {
-  project_title: 'Michael\'s Website',
-  palettes: [
-    {
-      palette_title: 'Website Background',
-      color_1: '6deef9',
-      color_2: 'eac761',
-      color_3: '79b9b8',
-      color_4: 'bcbc45',
-      color_5: '535275'
-    }
-  ]
- }
-]
+  {
+    project_title: 'Michaels Website',
+    palettes: [
+      {
+        palette_title: 'Website Background',
+        color_1: '6deef9',
+        color_2: 'eac761',
+        color_3: '79b9b8',
+        color_4: 'bcbc45',
+        color_5: '535275'
+      }
+    ]
+  }
+];
 
-module.exports = projectsData
+module.exports = projectsData;

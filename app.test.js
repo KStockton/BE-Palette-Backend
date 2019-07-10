@@ -225,7 +225,7 @@ describe('Server', () => {
       const response = await request(app).post('/api/v1/palettes/').send(newPalette);
       const results = await database('palettes').where('id', response.body.id);
       const palette = results[0];
-       
+        
       expect(newPalette.palette_title).toEqual(palette.palette_title);
     });
 
