@@ -76,6 +76,13 @@ describe('Server', () => {
 
       expect(result).toEqual(noMatch);
     });
+    it('should return a 500 status code and an error object', async () => {
+      const id = 'M';
+
+      const response = await request(app).get(`/api/v1/projects/${id}`);
+
+      expect(response.status).toBe(500);
+  });
   });
 
   describe('POST /api/v1/projects', () => {
