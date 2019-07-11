@@ -156,6 +156,14 @@ describe('Server', () => {
 
       expect(response.body.error).toEqual(badResponse);
     });
+    it('should return a 500 status code and an error object', async () => {
+      const id = 'M';
+      const newTitle = { project_title: 'Michael Hype'}
+
+      const response = await request(app).put(`/api/v1/projects/${id}`).send(newTitle);
+
+      expect(response.status).toBe(500);
+  });
   });
 
 
