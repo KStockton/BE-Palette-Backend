@@ -76,6 +76,13 @@ describe('Server', () => {
 
       expect(result).toEqual(noMatch);
     });
+    it('should return a 500 status code', async () => {
+      const id = 'M';
+
+      const response = await request(app).get(`/api/v1/projects/${id}`);
+
+      expect(response.status).toBe(500);
+    });
   });
 
   describe('POST /api/v1/projects', () => {
@@ -149,6 +156,15 @@ describe('Server', () => {
 
       expect(response.body.error).toEqual(badResponse);
     });
+    it('should return a 500 status code', async () => {
+      const id = 'M';
+      const newTitle = { project_title: 'Michael Hype'};
+
+      const response = await request(app)
+        .put(`/api/v1/projects/${id}`).send(newTitle);
+
+      expect(response.status).toBe(500);
+    });
   });
 
 
@@ -174,6 +190,15 @@ describe('Server', () => {
       const receivedRes = response.body.error;
 
       expect(receivedRes).toEqual(expectedResponse);
+    });
+    it('should return a 500 status code', async () => {
+      const id = 'M';
+      const newTitle = { project_title: 'Michael Hype'};
+
+      const response = await request(app)
+        .get(`/api/v1/palettes/${id}`).send(newTitle);
+
+      expect(response.status).toBe(500);
     });
   });
 
@@ -317,6 +342,23 @@ describe('Server', () => {
       const errMsg = response.body.error;
 
       expect(errMsg).toEqual(expectedResponse);
+    });
+    it('should return a 500 status code', async () => {
+      const id = 'M';
+      const palette = await database('palettes').first();
+      const paletteChange = {
+        palette_title: palette.palette_title,
+        color_1: palette.color_3,
+        color_2: palette.color_3,
+        color_3: palette.color_3,
+        color_4: palette.color_3,
+        color_5: palette.color_3
+      };
+
+      const response = await request(app)
+        .put(`/api/v1/palettes/${id}`).send(paletteChange);
+
+      expect(response.status).toBe(500);
     });
   });
 
