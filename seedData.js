@@ -1,4 +1,4 @@
-const projectsData = [
+module.exports = [
   {
     project_title: 'Kristens Project',
     palettes: [
@@ -34,5 +34,3 @@ const projectsData = [
     ]
   }
 ];
-
-module.exports = projectsData;
