@@ -2,7 +2,8 @@
 
 Make request to the base url:
 
-#### ``` Heroku URL ```
+### ``` Heroku URL ```
+https://backendpalettelit.herokuapp.com/
 
 ## Projects
 
