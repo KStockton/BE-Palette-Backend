@@ -11,9 +11,9 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 
-// app.get('/', async (request, response) => {
-//   await response.send('Ready to begin');
-// });
+app.get('/', async (request, response) => {
+  await response.send('Ready to begin');
+});
 
 app.get('/api/v1/projects', async (request, response) => {
   const projects = await db('projects').select();
