@@ -11,9 +11,9 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get('/', async (request, response) => {
-  await response.send('Ready to begin');
-});
+// app.get('/', async (request, response) => {
+//   await response.send('Ready to begin');
+// });
 
 app.get('/api/v1/projects', async (request, response) => {
   try {
