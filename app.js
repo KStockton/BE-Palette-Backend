@@ -8,13 +8,14 @@ const database = require('knex')(configuration);
 app.use(express.json());
 app.use(cors());
 
-app.get('/', async (request, response) => {
-  await response.send('Ready to begin');
-});
+// app.get('/', async (request, response) => {
+//   await response.send('Ready to begin');
+// });
 
 app.get('/api/v1/projects', async (request, response) => {
+  const projects = await database('projects').select();
+  
   try {
-    const projects = await database('projects').select();
 
     if (projects.length) {
       return response.status(200).json(projects);
