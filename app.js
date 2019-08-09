@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
-const database = require('knex')(configuration);
+const db = require('knex')(configuration);
 
 app.use(express.json());
 app.use(cors());
@@ -13,7 +13,7 @@ app.use(cors());
 // });
 
 app.get('/api/v1/projects', async (request, response) => {
-  const projects = await database('projects').select();
+  const projects = await db('projects').select();
   
   try {
 
@@ -29,7 +29,7 @@ app.get('/api/v1/projects/:id', async (request, response) => {
   const {id} = request.params;
 
   try {
-    const project = await database('projects').where('id', id).select();
+    const project = await db('projects').where('id', id).select();
 
     if (project.length) {
       return response.status(200).json(project);
@@ -46,7 +46,7 @@ app.get('/api/v1/projects/:id', async (request, response) => {
 
 app.delete('/api/v1/projects/:id', async (request, response) => {
   const id = request.params.id;
-  const matchingProject = await database('projects').where('id', id);
+  const matchingProject = await db('projects').where('id', id);
 
   if (!matchingProject.length) {
     return response.status(422).json({
@@ -55,8 +55,8 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
   }
 
   try {
-    await database('palettes').where('project_id', id).del();
-    await database('projects').where('id', id).del(); 
+    await db('palettes').where('project_id', id).del();
+    await db('projects').where('id', id).del(); 
     response.status(204).send();
   } catch (error) {
     response.status(500).json(error.message);
@@ -76,10 +76,10 @@ app.post('/api/v1/projects', async (request, response) => {
   const cleanedTitle = cleanUpTitle(newPost);
 
   try {
-    const updateDatabase =  await database('projects')
+    const updatedb =  await db('projects')
       .insert(cleanedTitle, 'id');
 
-    return response.status(201).json({id: updateDatabase[0]});
+    return response.status(201).json({id: updatedb[0]});
   } catch (error) {
     return response.status(500).json(error.message);
   }
@@ -99,13 +99,13 @@ app.put('/api/v1/projects/:id', async (request, response) => {
   }
 
   try {
-    const isFound = await database('projects').where('id', newUpdateId).first();
+    const isFound = await db('projects').where('id', newUpdateId).first();
     
     if (isFound) {
-      await database('projects').where('id', newUpdateId)
+      await db('projects').where('id', newUpdateId)
         .update({...updateRequest});
       
-      const result = await database('projects').where('id', isFound.id).first();
+      const result = await db('projects').where('id', isFound.id).first();
 
       return response.status(200).json(result);
     } else if (!isFound) {
@@ -121,7 +121,7 @@ app.put('/api/v1/projects/:id', async (request, response) => {
 // Palettes
 app.get('/api/v1/palettes', async (request, response) => {
   try {
-    const palettes = await database('palettes').select();
+    const palettes = await db('palettes').select();
 
     if (palettes.length) {
       return response.status(200).json(palettes);
@@ -135,7 +135,7 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
   const {id} = request.params;
 
   try {
-    const palette = await database('palettes').where('id', id).select();
+    const palette = await db('palettes').where('id', id).select();
 
     if (palette.length) {
       return response.status(200).json(palette);
@@ -152,7 +152,7 @@ app.get('/api/v1/palettes/:id', async (request, response) => {
 
 app.delete('/api/v1/palettes/:id', async (request, response) => {
   const id = request.params.id;
-  const matchingPalette = await database('palettes').where('id', id);
+  const matchingPalette = await db('palettes').where('id', id);
 
   if (!matchingPalette.length) {
     return response.status(404).json({
@@ -160,7 +160,7 @@ app.delete('/api/v1/palettes/:id', async (request, response) => {
     });
   }
   try {
-    await database('palettes').where('id', id).del();
+    await db('palettes').where('id', id).del();
     return response.status(204).send();
   } catch (error) {
     return response.status(500).json(error.message);
@@ -186,7 +186,7 @@ app.post('/api/v1/palettes', async (request, response) => {
   }
   const cleanedTitle = cleanUpTitle(newPalette);
 
-  const matchingProject = await database('projects')
+  const matchingProject = await db('projects')
     .where('project_title', cleanedTitle.project_title)
     .first();
  
@@ -203,7 +203,7 @@ app.post('/api/v1/palettes', async (request, response) => {
       project_id: matchingProject.id
     };
 
-      const result = await database('palettes').insert(postPalette, 'id');
+      const result = await db('palettes').insert(postPalette, 'id');
 
       return response.status(201).json({id: result[0]});
     } else {
@@ -234,14 +234,14 @@ app.put('/api/v1/palettes/:id', async (request, response) => {
   } 
 
   try {
-    const isFound = await database('palettes')
+    const isFound = await db('palettes')
       .where('id', parseInt(request.params.id))
       .first();
       
     if (isFound) {
-      await database('palettes').where('id', isFound.id)
+      await db('palettes').where('id', isFound.id)
         .update({...modifiedPalette});
-      const result = await database('palettes').where('id', isFound.id).first();
+      const result = await db('palettes').where('id', isFound.id).first();
 
       return response.status(200).json(result);
     } else if (!isFound) {
@@ -259,7 +259,7 @@ app.get('/api/v1/projects/:id/palettes', async (request, response) => {
   const projectId = request.params.id;
   const queryHexCodes = request.params.hex;
 
-  let paletteColors = await database('palettes').where('project_id', projectId);
+  let paletteColors = await db('palettes').where('project_id', projectId);
 
   if (queryHexCodes) {
     paletteColors = paletteColors.filter(hexcode => {

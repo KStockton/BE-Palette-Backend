@@ -5,6 +5,7 @@
   "main": "knexfile.js",
   "scripts": {
     "start": "node server.js",
+    "server": "nodemon server.js",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll",
     "seed:run": "knex seed:run --env=test"
