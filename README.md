@@ -2,8 +2,10 @@
 [![Build Status](https://travis-ci.org/KStockton/BE-Palette-Picker.svg?branch=master)](https://travis-ci.org/KStockton/BE-Palette-Picker)
 Make request to the base url:
 
-### ``` Heroku URL ```
+### ``` Front End Heroku URL ```
 https://backendpalettelit.herokuapp.com/
+
+### Documentation and Example Response
 
 ## Projects
 
