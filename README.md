@@ -1,5 +1,5 @@
 ## Get Started :
-
+[![Build Status](https://travis-ci.org/KStockton/BE-Palette-Picker.svg?branch=master)](https://travis-ci.org/KStockton/BE-Palette-Picker)
 
 ### ``` Front End Heroku URL ```
 https://backendpalettelit.herokuapp.com/

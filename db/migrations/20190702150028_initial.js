@@ -15,13 +15,13 @@ exports.up = function(knex) {
       table.string('color_3');
       table.string('color_4');
       table.string('color_5');
-      table.integer('project_id').unsigned()
+      table.integer('project_id').unsigned();
       table.foreign('project_id')
         .references('projects.id');
 
-      table.timestamps(true, true)
+      table.timestamps(true, true);
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex) {
